@@ -87,7 +87,7 @@ app.get("/edit/:id", async (req, res) => {
 
 // POST /edit/:id — update the book in the database
 app.post("/edit/:id", async (req, res) => {
-    const id = req.params.id;
+    const id = req.params.id;   //I was taught req.body.___
     const rating  = req.body.updatedRating;
     const notes = req.body.updatedNotes;
   
@@ -101,7 +101,13 @@ app.post("/edit/:id", async (req, res) => {
 
 // POST /delete/:id — remove a book from the database
 app.post("/delete/:id", async (req, res) => {
-  // TODO: You fill this in! Use DELETE FROM books WHERE id = $1
+    const id = req.params.id;   //I was taught req.body.___
+  try {
+    await db.query("DELETE FROM books WHERE id = $1", [id]);
+    res.redirect("/");
+  } catch (err) {
+    console.log(err);
+  }
 });
 
 // ─── Start server ─────────────────────────────────────────────────────────────
