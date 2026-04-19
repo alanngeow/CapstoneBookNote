@@ -87,7 +87,16 @@ app.get("/edit/:id", async (req, res) => {
 
 // POST /edit/:id — update the book in the database
 app.post("/edit/:id", async (req, res) => {
-  // TODO: You fill this in! Use UPDATE ... SET ... WHERE id = $1
+    const id = req.params.id;
+    const rating  = req.body.updatedRating;
+    const notes = req.body.updatedNotes;
+  
+  try {
+    await db.query("UPDATE books SET rating = $1, notes = $2 WHERE id = $3", [rating, notes, id]);
+    res.redirect("/");
+  } catch (err) {
+    console.log(err);
+  }
 });
 
 // POST /delete/:id — remove a book from the database
