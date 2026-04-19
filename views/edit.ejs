@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edit Book</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+
+  <header>
+    <a href="/" class="btn-back">← Back to my books</a>
+    <h1>Edit Book</h1>
+  </header>
+
+  <!-- ─── Edit Book Form ───────────────────────────────────────────────────────
+    Notice the action uses the book's id so Express knows WHICH book to update.
+    The book object is passed in from your GET /edit/:id route which fetches
+    the existing row from PostgreSQL before rendering this page.
+  -->
+  <form action="/edit/<%= book.id %>" method="POST" class="book-form">
+
+    <!-- Title — pre-filled with existing value -->
+    <div class="form-group">
+      <label for="title">Book Title</label>
+      <input
+        type="text"
+        id="title"
+        name="title"
+        value="<%= book.title %>"
+        required
+      >
+    </div>
+
+    <!-- Author — pre-filled with existing value -->
+    <div class="form-group">
+      <label for="author">Author</label>
+      <input
+        type="text"
+        id="author"
+        name="author"
+        value="<%= book.author %>"
+        required
+      >
+    </div>
+
+    <!-- ISBN — pre-filled with existing value -->
+    <div class="form-group">
+      <label for="isbn">ISBN</label>
+      <input
+        type="text"
+        id="isbn"
+        name="isbn"
+        value="<%= book.isbn || '' %>"
+      >
+      <small>Used to fetch the book cover automatically</small>
+    </div>
+
+    <!-- Rating — pre-filled with existing value -->
+    <div class="form-group">
+      <label for="rating">Your Rating (1–10)</label>
+      <input
+        type="number"
+        id="rating"
+        name="rating"
+        min="1"
+        max="10"
+        value="<%= book.rating %>"
+        required
+      >
+    </div>
+
+    <!-- ─── Date Read ──────────────────────────────────────────────────────────
+      Dates need special handling. PostgreSQL returns dates as full JavaScript
+      Date objects. We need to convert it to "YYYY-MM-DD" string format because
+      that's the only format HTML date inputs understand.
+    -->
+    <div class="form-group">
+      <label for="date_read">Date Read</label>
+      <input
+        type="date"
+        id="date_read"
+        name="date_read"
+        value="<%= book.date_read ? new Date(book.date_read).toISOString().split('T')[0] : '' %>"
+      >
+    </div>
+
+    <!-- Notes — pre-filled inside the textarea tags (not value attribute) -->
+    <div class="form-group">
+      <label for="notes">Your Notes / Review</label>
+      <!--
+        Textareas don't use value="" like inputs do.
+        The pre-filled content goes BETWEEN the opening and closing tags.
+        If you use value="" here it will literally show as text on screen.
+      -->
+      <textarea
+        id="notes"
+        name="notes"
+        rows="5"
+      ><%= book.notes || '' %></textarea>
+    </div>
+
+    <button type="submit" class="btn">Save Changes</button>
+
+  </form>
+
+</body>
+</html>

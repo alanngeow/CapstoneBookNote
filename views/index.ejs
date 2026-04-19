@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Book Notes</title>
+  <!-- Links to your styles.css file in the public/ folder -->
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+
+  <header>
+    <h1>My Book Notes</h1>
+    <p>Books I've read, rated and reviewed.</p>
+    <!-- Button that takes the user to the add book form -->
+    <a href="/add" class="btn">+ Add a Book</a>
+  </header>
+
+  <!-- ─── Sort Controls ─────────────────────────────────────────────────────
+    These are just links that reload the page with a ?sort= query parameter.
+    The server reads req.query.sort and changes the ORDER BY in the SQL query.
+    currentSort is passed in from the server so we can highlight the active one.
+  -->
+  <div class="sort-controls">
+    <span>Sort by:</span>
+
+    <a href="/?sort=rating" class="<%= currentSort === 'rating' ? 'active' : '' %>">
+      Rating
+    </a>
+
+    <a href="/?sort=date_read" class="<%= currentSort === 'date_read' ? 'active' : '' %>">
+      Date Read
+    </a>
+
+    <a href="/?sort=title" class="<%= currentSort === 'title' ? 'active' : '' %>">
+      Title
+    </a>
+  </div>
+
+  <!-- ─── Book List ──────────────────────────────────────────────────────────
+    books is the array passed in from your Express route.
+    We loop through each book and render a card for it.
+    If there are no books yet, we show a friendly empty state instead.
+  -->
+  <% if (books.length === 0) { %>
+    <div class="empty-state">
+      <p>You haven't added any books yet.</p>
+      <a href="/add" class="btn">Add your first book</a>
+    </div>
+
+  <% } else { %>
+    <div class="book-grid">
+
+      <% books.forEach(book => { %>
+        <div class="book-card">
+
+          <!-- ─── Cover Image ───────────────────────────────────────────────
+            coverUrl was built in your Express route using the book's ISBN.
+            If no ISBN was provided, it falls back to a placeholder image.
+            onerror is a safety net — if the image URL breaks, swap it out.
+          -->
+          <img
+            src="<%= book.coverUrl %>"
+            alt="<%= book.title %> cover"
+            class="book-cover"
+            onerror="this.src='https://via.placeholder.com/128x193?text=No+Cover'"
+          >
+
+          <div class="book-info">
+
+            <!-- Book title and author -->
+            <h2><%= book.title %></h2>
+            <p class="author">by <%= book.author %></p>
+
+            <!-- Rating — displays the number out of 10 -->
+            <p class="rating">⭐ <%= book.rating %> / 10</p>
+
+            <!-- Date read — .toLocaleDateString() formats it nicely -->
+            <p class="date">
+              Read on: <%= new Date(book.date_read).toLocaleDateString("en-US", {
+                year: "numeric", month: "long", day: "numeric"
+              }) %>
+            </p>
+
+            <!-- Notes/review — only show if the user wrote something -->
+            <% if (book.notes) { %>
+              <p class="notes"><%= book.notes %></p>
+            <% } %>
+
+            <!-- ─── Action Buttons ───────────────────────────────────────────
+              Edit is a regular link to the edit page for this specific book.
+              Delete is a form with a POST because browsers can only send
+              GET and POST — we can't use DELETE directly from HTML.
+            -->
+            <div class="actions">
+              <a href="/edit/<%= book.id %>" class="btn btn-edit">Edit</a>
+
+              <form action="/delete/<%= book.id %>" method="POST">
+                <button type="submit" class="btn btn-delete"
+                  onclick="return confirm('Are you sure you want to delete this book?')">
+                  Delete
+                </button>
+              </form>
+            </div>
+
+          </div>
+        </div>
+      <% }) %>
+
+    </div>
+  <% } %>
+
+</body>
+</html>
