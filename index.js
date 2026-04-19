@@ -87,15 +87,22 @@ app.get("/edit/:id", async (req, res) => {
 
 // POST /edit/:id — update the book in the database
 app.post("/edit/:id", async (req, res) => {
-    const id = req.params.id;   //I was taught req.body.___
-    const rating  = req.body.updatedRating;
-    const notes = req.body.updatedNotes;
-  
+  const id = req.params.id;
+
+  // These names must exactly match the name="" attributes in edit.ejs
+  const { title, author, isbn, rating, date_read, notes } = req.body;
+
   try {
-    await db.query("UPDATE books SET rating = $1, notes = $2 WHERE id = $3", [rating, notes, id]);
+    await db.query(
+      `UPDATE books 
+       SET title = $1, author = $2, isbn = $3, rating = $4, date_read = $5, notes = $6
+       WHERE id = $7`,
+      [title, author, isbn, rating, date_read, notes, id]
+    );
     res.redirect("/");
   } catch (err) {
-    console.log(err);
+    console.error("Error updating book:", err);
+    res.status(500).send("Could not update the book. Please try again.");
   }
 });
 

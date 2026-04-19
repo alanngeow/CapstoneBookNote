@@ -1,0 +1,304 @@
+/* ─── Reset & Base ────────────────────────────────────────────────────────────
+   Removes default browser spacing and sets a consistent box model.
+   box-sizing: border-box means padding is included in the element's width —
+   this prevents a lot of unexpected layout bugs.
+*/
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 18px;
+  line-height: 1.7;
+  color: #222;
+  background-color: #fff;
+  max-width: 750px;      /* keeps content readable — wide lines are hard to read */
+  margin: 0 auto;        /* centers the content on wide screens */
+  padding: 40px 20px;    /* breathing room on top/bottom and sides */
+}
+
+/* ─── Typography ──────────────────────────────────────────────────────────────
+   Keeping headings simple and understated like sive.rs
+*/
+h1 {
+  font-size: 2rem;
+  font-weight: normal;   /* lighter weight feels more editorial */
+  margin-bottom: 8px;
+}
+
+h2 {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+
+p {
+  margin-bottom: 8px;
+}
+
+small {
+  font-size: 0.8rem;
+  color: #888;
+  display: block;
+  margin-top: 4px;
+}
+
+/* ─── Header ──────────────────────────────────────────────────────────────────
+   The top section of the page with the title and add button.
+*/
+header {
+  margin-bottom: 32px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid #ddd;
+}
+
+header p {
+  color: #666;
+  margin-bottom: 16px;
+}
+
+/* ─── Buttons ─────────────────────────────────────────────────────────────────
+   .btn is the base style. Modifier classes like .btn-edit and .btn-delete
+   override just the color — this is called BEM-style (Block Element Modifier).
+*/
+.btn {
+  display: inline-block;
+  padding: 8px 16px;
+  background-color: #222;
+  color: #fff;
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-family: inherit;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.btn:hover {
+  background-color: #444;
+}
+
+.btn-edit {
+  background-color: #555;
+  font-size: 0.85rem;
+  padding: 6px 12px;
+}
+
+.btn-edit:hover {
+  background-color: #333;
+}
+
+.btn-delete {
+  background-color: #c0392b;
+  font-size: 0.85rem;
+  padding: 6px 12px;
+}
+
+.btn-delete:hover {
+  background-color: #96281b;
+}
+
+.btn-back {
+  display: inline-block;
+  margin-bottom: 16px;
+  color: #555;
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+
+.btn-back:hover {
+  color: #222;
+}
+
+/* ─── Sort Controls ───────────────────────────────────────────────────────────
+   The row of sort links at the top of the book list.
+*/
+.sort-controls {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 32px;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.sort-controls a {
+  color: #555;
+  text-decoration: none;
+  padding-bottom: 2px;
+  border-bottom: 2px solid transparent;   /* invisible border as placeholder */
+  transition: border-color 0.2s ease;
+}
+
+.sort-controls a:hover {
+  color: #222;
+  border-bottom-color: #aaa;
+}
+
+/* Active sort link — highlights which sort is currently applied */
+.sort-controls a.active {
+  color: #222;
+  font-weight: bold;
+  border-bottom-color: #222;
+}
+
+/* ─── Empty State ─────────────────────────────────────────────────────────────
+   Shown when the user has no books yet.
+*/
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: #888;
+}
+
+.empty-state p {
+  margin-bottom: 16px;
+  font-size: 1.1rem;
+}
+
+/* ─── Book Grid ───────────────────────────────────────────────────────────────
+   Each book is a row with a cover image on the left and info on the right.
+   We use flexbox on the grid to stack the cards vertically.
+*/
+.book-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;              /* space between each book card */
+}
+
+/* ─── Book Card ───────────────────────────────────────────────────────────────
+   Each card is a horizontal row — cover image + text side by side.
+*/
+.book-card {
+  display: flex;
+  gap: 24px;
+  padding-bottom: 40px;
+  border-bottom: 1px solid #eee;   /* subtle divider between books */
+}
+
+.book-card:last-child {
+  border-bottom: none;   /* no divider after the last book */
+}
+
+/* ─── Book Cover ──────────────────────────────────────────────────────────────
+   Fixed size so all covers align consistently regardless of image dimensions.
+*/
+.book-cover {
+  width: 90px;
+  height: 135px;
+  object-fit: cover;      /* crops the image to fill the box without stretching */
+  flex-shrink: 0;         /* prevents the image from squishing on narrow screens */
+  border: 1px solid #ddd;
+}
+
+/* ─── Book Info ───────────────────────────────────────────────────────────────
+   The text content next to the cover image.
+*/
+.book-info {
+  flex: 1;   /* takes up all remaining width next to the cover image */
+}
+
+.author {
+  color: #666;
+  font-size: 0.95rem;
+  margin-bottom: 8px;
+}
+
+.rating {
+  font-size: 0.95rem;
+  margin-bottom: 4px;
+}
+
+.date {
+  font-size: 0.85rem;
+  color: #888;
+  margin-bottom: 10px;
+}
+
+.notes {
+  font-size: 0.95rem;
+  color: #444;
+  border-left: 3px solid #ddd;   /* subtle quote-style left border */
+  padding-left: 12px;
+  margin-bottom: 16px;
+  font-style: italic;
+}
+
+/* ─── Action Buttons Row ──────────────────────────────────────────────────────
+   Edit and Delete buttons sit side by side below the book info.
+   align-items: center keeps the button and form vertically aligned.
+*/
+.actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+/* Remove default form spacing so the delete button aligns with the edit button */
+.actions form {
+  margin: 0;
+  padding: 0;
+}
+
+/* ─── Book Form (Add & Edit pages) ───────────────────────────────────────────
+   Shared styles used by both add.ejs and edit.ejs.
+*/
+.book-form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  margin-top: 24px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+label {
+  font-size: 0.9rem;
+  font-weight: bold;
+  color: #333;
+}
+
+input,
+textarea {
+  font-family: inherit;
+  font-size: 1rem;
+  padding: 10px 12px;
+  border: 1px solid #ccc;
+  color: #222;
+  background-color: #fafafa;
+  transition: border-color 0.2s ease;
+  width: 100%;
+}
+
+input:focus,
+textarea:focus {
+  outline: none;
+  border-color: #222;    /* darkens the border when the field is active */
+  background-color: #fff;
+}
+
+textarea {
+  resize: vertical;      /* lets the user drag to resize vertically only */
+  min-height: 120px;
+}
+
+/* ─── Responsive ──────────────────────────────────────────────────────────────
+   On small screens, stack the cover image above the text instead of side by side.
+*/
+@media (max-width: 480px) {
+  .book-card {
+    flex-direction: column;
+  }
+
+  .book-cover {
+    width: 80px;
+    height: 120px;
+  }
+}
